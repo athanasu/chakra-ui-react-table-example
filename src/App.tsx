@@ -1,24 +1,32 @@
-import { ChakraProvider, Center } from "@chakra-ui/react";
+import React from "react";
+import { ChakraProvider, Box } from "@chakra-ui/react";
 
 import "./App.css";
 
-import { Table } from "./components/Table";
+import { Table } from "./components/Table/Table";
 
 function App() {
-  const data = [
-    {
-      id: 0,
-      first: "G",
-      last: "A",
-      action: () => console.log("action"),
-    },
-  ];
+  const cb = React.useCallback(() => console.log("Action"), []);
+  function makeData() {
+    const data = [];
+    for (let index = 0; index < 20; index++) {
+      data[index] = {
+        id: index,
+        first: `First-${index}`,
+        last: `Last-${index}`,
+        action: cb,
+      };
+    }
+    return data;
+  }
+
+  const data = makeData();
 
   return (
     <ChakraProvider>
-      <Center width="800px" m="auto" mt="200px">
+      <Box width="800px" m="auto" mt="200px">
         <Table data={data} />
-      </Center>
+      </Box>
     </ChakraProvider>
   );
 }

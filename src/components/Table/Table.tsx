@@ -6,17 +6,15 @@ import {
   Tr,
   Th,
   Td,
-  IconButton,
-  Spacer,
   Flex,
 } from "@chakra-ui/react";
 import { useTable, usePagination, Column } from "react-table";
 import React from "react";
+import { TableData, TableProps } from "./Table.types";
+import { Pagination } from "../Pagination/Pagination";
 
-// import { TableProps } from "./Table.types";
-
-export const setColumnWidth = (id: string) => {
-  switch (id) {
+export const setColumnWidth = (columnId: string) => {
+  switch (columnId) {
     case "first":
     case "last":
       return { width: "200px" };
@@ -28,17 +26,8 @@ export const setColumnWidth = (id: string) => {
   }
 };
 
-export function Table({ data }: any) {
-  const onEdit = React.useCallback(() => {
-    console.log("onEdit");
-  }, []);
-
-  const columns: Column<{
-    id: number;
-    first: string;
-    last: string;
-    action: () => void;
-  }>[] = React.useMemo(
+export function Table({ data }: TableProps) {
+  const columns: Column<TableData>[] = React.useMemo(
     () => [
       {
         Header: "id",
@@ -56,24 +45,26 @@ export function Table({ data }: any) {
       },
       {
         Header: "action",
-        accessor: () => {
+        accessor: ({ action }) => {
           return (
             <Flex>
-              <Button
-                onClick={() => onEdit()}
-                aria-label="Edit translation button"
-              >
-                Edit
+              <Button onClick={() => action()} aria-label="action button">
+                CTA
               </Button>
             </Flex>
           );
         },
       },
     ],
-    [onEdit]
+    []
   );
 
-  const tableInstance = useTable({ columns, data }, usePagination);
+  const initialState = { pageSize: 5 };
+
+  const tableInstance = useTable(
+    { columns, data, initialState },
+    usePagination
+  );
 
   const {
     getTableProps,
@@ -141,6 +132,9 @@ export function Table({ data }: any) {
           })}
         </Tbody>
       </ChakraTable>
+
+      {/* Show pagination */}
+      <Pagination tableInstance={tableInstance} />
     </>
   );
 }
