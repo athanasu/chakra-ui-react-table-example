@@ -9,7 +9,7 @@ function App() {
   const cb = React.useCallback(() => console.log("Action"), []);
   function makeData() {
     const data = [];
-    for (let index = 0; index < 20; index++) {
+    for (let index = 0; index < 40; index++) {
       data[index] = {
         id: index,
         first: `First-${index}`,

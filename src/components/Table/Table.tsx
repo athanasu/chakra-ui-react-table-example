@@ -59,7 +59,7 @@ export function Table({ data }: TableProps) {
     []
   );
 
-  const initialState = { pageSize: 5 };
+  const initialState = { pageSize: 20 };
 
   const tableInstance = useTable(
     { columns, data, initialState },
