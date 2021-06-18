@@ -7,9 +7,16 @@ import {
   Th,
   Td,
   Flex,
+  Checkbox,
 } from "@chakra-ui/react";
 import { TriangleUpIcon, TriangleDownIcon } from "@chakra-ui/icons";
-import { useTable, usePagination, useSortBy, Column } from "react-table";
+import {
+  useTable,
+  usePagination,
+  useSortBy,
+  useRowSelect,
+  Column,
+} from "react-table";
 import React from "react";
 import { TableData, TableProps } from "./Table.types";
 import { Pagination } from "../Pagination/Pagination";
@@ -62,10 +69,52 @@ export function Table({ data }: TableProps) {
 
   const initialState = { pageSize: 5 };
 
+  const IndeterminateCheckbox = React.forwardRef(
+    ({ indeterminate, ...rest }: any, ref) => {
+      const defaultRef = React.useRef();
+      const resolvedRef = ref || (defaultRef as any);
+
+      React.useEffect(() => {
+        resolvedRef.current.indeterminate = indeterminate;
+      }, [resolvedRef, indeterminate]);
+
+      return (
+        <>
+          <input type="checkbox" ref={resolvedRef} {...rest} />
+          {/* <Checkbox type="checkbox" ref={resolvedRef} {...rest} /> */}
+        </>
+      );
+    }
+  );
+
   const tableInstance = useTable(
     { columns, data, initialState },
     useSortBy,
-    usePagination
+    usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [
+        // Let's make a column for selection
+        {
+          id: "selection",
+          // The header can use the table's getToggleAllRowsSelectedProps method
+          // to render a checkbox
+          Header: ({ getToggleAllPageRowsSelectedProps }) => (
+            <div>
+              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+            </div>
+          ),
+          // The cell can use the individual row's getToggleRowSelectedProps method
+          // to the render a checkbox
+          Cell: ({ row }: any) => (
+            <div>
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+            </div>
+          ),
+        },
+        ...columns,
+      ]);
+    }
   );
 
   const {
