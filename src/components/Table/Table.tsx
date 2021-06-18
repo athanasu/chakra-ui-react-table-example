@@ -8,7 +8,8 @@ import {
   Td,
   Flex,
 } from "@chakra-ui/react";
-import { useTable, usePagination, Column } from "react-table";
+import { TriangleUpIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import { useTable, usePagination, useSortBy, Column } from "react-table";
 import React from "react";
 import { TableData, TableProps } from "./Table.types";
 import { Pagination } from "../Pagination/Pagination";
@@ -59,10 +60,11 @@ export function Table({ data }: TableProps) {
     []
   );
 
-  const initialState = { pageSize: 20 };
+  const initialState = { pageSize: 5 };
 
   const tableInstance = useTable(
     { columns, data, initialState },
+    useSortBy,
     usePagination
   );
 
@@ -85,19 +87,39 @@ export function Table({ data }: TableProps) {
               <Tr {...getHeaderGroupProps()}>
                 {
                   // Loop over the headers in each row
-                  headers.map(({ getHeaderProps, render, id }: any) => (
-                    // Apply the header cell props
-                    <Th
-                      {...getHeaderProps({
-                        style: setColumnWidth(id),
-                      })}
-                    >
-                      {
-                        // Render the header
-                        render("Header")
-                      }
-                    </Th>
-                  ))
+                  headers.map(
+                    ({
+                      getHeaderProps,
+                      render,
+                      id,
+                      getSortByToggleProps,
+                      isSorted,
+                      isSortedDesc,
+                    }: any) => (
+                      // Apply the header cell props
+                      <Th
+                        {...getHeaderProps({
+                          style: setColumnWidth(id),
+                          ...getSortByToggleProps(),
+                        })}
+                      >
+                        {/* Render the header */}
+                        {render("Header")}
+                        {/* Add a sort direction indicator */}
+                        <span>
+                          {isSorted ? (
+                            isSortedDesc ? (
+                              <TriangleDownIcon />
+                            ) : (
+                              <TriangleUpIcon />
+                            )
+                          ) : (
+                            ""
+                          )}
+                        </span>
+                      </Th>
+                    )
+                  )
                 }
               </Tr>
             ))

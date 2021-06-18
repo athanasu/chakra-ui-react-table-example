@@ -20,11 +20,15 @@ function App() {
     return data;
   }
 
-  const data = makeData();
+  function shuffle(array: any) {
+    return array.sort(() => Math.random() - 0.5);
+  }
+
+  const data = shuffle(makeData());
 
   return (
     <ChakraProvider>
-      <Box width="800px" m="auto" mt="200px">
+      <Box width="800px" m="auto" mt="100px">
         <Table data={data} />
       </Box>
     </ChakraProvider>
