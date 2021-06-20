@@ -8,3 +8,8 @@ export type TableData = {
 export type TableProps = {
   data: TableData[];
 };
+
+export type RowCell = {
+  getCellProps: () => JSX.IntrinsicAttributes;
+  render: (arg0: string) => any;
+};

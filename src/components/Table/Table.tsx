@@ -7,7 +7,6 @@ import {
   Th,
   Td,
   Flex,
-  Checkbox,
 } from "@chakra-ui/react";
 import { TriangleUpIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import {
@@ -18,21 +17,10 @@ import {
   Column,
 } from "react-table";
 import React from "react";
-import { TableData, TableProps } from "./Table.types";
-import { Pagination } from "../Pagination/Pagination";
 
-export const setColumnWidth = (columnId: string) => {
-  switch (columnId) {
-    case "first":
-    case "last":
-      return { width: "200px" };
-    case "id":
-    case "action":
-      return { width: "150px" };
-    default:
-      return {};
-  }
-};
+import { RowCell, TableData, TableProps } from "./Table.types";
+import { IndeterminateCheckbox } from "../IndeterminateCheckbox/IndeterminateCheckbox";
+import { Pagination } from "../Pagination/Pagination";
 
 export function Table({ data }: TableProps) {
   const columns: Column<TableData>[] = React.useMemo(
@@ -68,19 +56,6 @@ export function Table({ data }: TableProps) {
   );
 
   const initialState = { pageSize: 5 };
-
-  const IndeterminateCheckbox = React.forwardRef(
-    ({ indeterminate, ...rest }: any, ref) => {
-      const defaultRef = React.useRef();
-      const resolvedRef = ref || (defaultRef as any);
-
-      React.useEffect(() => {
-        resolvedRef.current.indeterminate = indeterminate;
-      }, [resolvedRef, indeterminate]);
-
-      return <Checkbox type="checkbox" ref={resolvedRef} {...rest} />;
-    }
-  );
 
   const tableInstance = useTable(
     { columns, data, initialState },
@@ -119,7 +94,7 @@ export function Table({ data }: TableProps) {
         <Thead>
           {
             // Loop over the header rows
-            headerGroups.map(({ getHeaderGroupProps, headers }: any) => (
+            headerGroups.map(({ getHeaderGroupProps, headers }) => (
               // Apply the header row props
               <Tr {...getHeaderGroupProps()}>
                 {
@@ -128,18 +103,12 @@ export function Table({ data }: TableProps) {
                     ({
                       getHeaderProps,
                       render,
-                      id,
                       getSortByToggleProps,
                       isSorted,
                       isSortedDesc,
-                    }: any) => (
+                    }) => (
                       // Apply the header cell props
-                      <Th
-                        {...getHeaderProps({
-                          style: setColumnWidth(id),
-                          ...getSortByToggleProps(),
-                        })}
-                      >
+                      <Th {...getHeaderProps({ ...getSortByToggleProps() })}>
                         {/* Render the header */}
                         {render("Header")}
                         {/* Add a sort direction indicator */}
@@ -150,9 +119,7 @@ export function Table({ data }: TableProps) {
                             ) : (
                               <TriangleUpIcon />
                             )
-                          ) : (
-                            ""
-                          )}
+                          ) : null}
                         </span>
                       </Th>
                     )
@@ -169,22 +136,17 @@ export function Table({ data }: TableProps) {
               <Tr {...row.getRowProps()}>
                 {
                   // Loop over the rows cells
-                  row.cells.map(
-                    (cell: {
-                      getCellProps: () => JSX.IntrinsicAttributes;
-                      render: (arg0: string) => any;
-                    }) => {
-                      // Apply the cell props
-                      return (
-                        <Td {...cell.getCellProps()}>
-                          {
-                            // Render the cell contents
-                            cell.render("Cell")
-                          }
-                        </Td>
-                      );
-                    }
-                  )
+                  row.cells.map((cell: RowCell) => {
+                    // Apply the cell props
+                    return (
+                      <Td {...cell.getCellProps()}>
+                        {
+                          // Render the cell contents
+                          cell.render("Cell")
+                        }
+                      </Td>
+                    );
+                  })
                 }
               </Tr>
             );

@@ -1,23 +1,21 @@
 import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Select,
-  Spacer,
-  Text,
-} from "@chakra-ui/react";
-import {
   ArrowLeftIcon,
   ArrowRightIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Select,
+  Spacer,
+  Text,
+} from "@chakra-ui/react";
+import React from "react";
 
 import { TableInstance } from "./Pagination.types";
-import React from "react";
 
 export function Pagination({ tableInstance }: TableInstance) {
   const {
