@@ -2,6 +2,13 @@
   "name": "chakra-ui-react-table-example",
   "version": "0.1.0",
   "private": true,
+  "author": "George Athanasoulias <athanasu@gmail.com> (https://www.linkedin.com/in/athanasu/)",
+  "keywords": [
+    "cra",
+    "create-react-app",
+    "react-table",
+    "chakra-ui"
+  ],
   "dependencies": {
     "@chakra-ui/icons": "^1.0.13",
     "@chakra-ui/react": "^1.6.3",
