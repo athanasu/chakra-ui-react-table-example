@@ -9,5 +9,5 @@ This example uses:
  
   * `useTable`: The root hook for React Table
   * `useSortBy`: The hook that implements row sorting
-  * `usePagination` The hook that implements row pagination
-  * `useRowSelect` The hook that implements basic row selection
+  * `usePagination`: The hook that implements row pagination
+  * `useRowSelect`: The hook that implements basic row selection
